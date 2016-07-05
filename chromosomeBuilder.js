@@ -14,6 +14,7 @@ var sequencer = function(data_set){
         sq.sequence = sequences[s].slice(4);
         sq.leftMatches = [];
         sq.rightMatches = [];
+        sq.slice = [];
         // console.log(id);
         sequence_arr[s] = sq;
     }
@@ -57,6 +58,9 @@ var linkSequences = function(sequences, sequenceIndex){
                 // console.log('reciprocal match found at sequence index: ', sequenceIndex, ' and ', sequenceIndex2);
                 sequences[sequenceIndex].leftMatches.push(sequenceIndex2);
                 sequences[sequenceIndex2].rightMatches.push(sequenceIndex);
+                sequences[sequenceIndex2].slice.push(slice);
+                sequences[sequenceIndex2].slicedSequence = sequences[sequenceIndex2].sequence.slice(0, sequences[sequenceIndex2].sequence.length-slice.length);
+
             }
         }
     }
@@ -75,7 +79,7 @@ var attachSequences = function(linked_sequences, sequenceAccumulator, sequenceId
     }else if(linked_sequences[sequenceIdx].rightMatches.length==0){
         return sequenceAccumulator;
     }
-    sequenceAccumulator+=linked_sequences[sequenceIdx].sequence;
+    sequenceAccumulator+=linked_sequences[sequenceIdx].slicedSequence;
     return attachSequences(linked_sequences, sequenceAccumulator, linked_sequences[sequenceIdx].rightMatches[0]);
 }
 
